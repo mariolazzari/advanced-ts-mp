@@ -1,0 +1,25 @@
+import { String, Union } from "ts-toolbelt";
+
+const query = "/home?name=mario&age=48";
+
+type Query = typeof query;
+
+type SecondPartQuery = String.Split<Query, "?">[1];
+
+type QueryElements = String.Split<SecondPartQuery, "&">;
+
+type QueryParams = {
+  [QueryElement in QueryElements[number]]: {
+    [Key in String.Split<QueryElement, "=">[0]]: String.Split<
+      QueryElement,
+      "="
+    >[1];
+  };
+}[QueryElements[number]];
+
+const obj: Union.Merge<QueryParams> = {
+  name: "mario",
+  age: "48",
+};
+
+console.log(obj);
